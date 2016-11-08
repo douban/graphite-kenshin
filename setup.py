@@ -10,7 +10,7 @@ setup(
     author="zzl0",
     description=('A plugin for using graphite-api with kenshin-based '
                  'storage backend'),
-    py_modules=('kenshin_api',),
+    py_modules=('kenshin_api', 'kenshin_functions'),
     zip_safe=False,
     include_package_data=True,
     platforms='any',
