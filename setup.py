@@ -1,17 +1,24 @@
 # coding: utf-8
+from setuptools import setup, Extension, find_packages
 
-from setuptools import setup
-
+__PACKAGE__ = 'kenshin_api'
 
 setup(
-    name='kenshin_api',
+    name=__PACKAGE__,
     version='0.1.0',
     url='https://github.com/douban/graphite-kenshin.git',
     author="zzl0",
     description=('A plugin for using graphite-api with kenshin-based '
                  'storage backend'),
-    py_modules=('kenshin_api', 'kenshin_api.functions'),
+    packages=find_packages(),
     zip_safe=False,
+    ext_modules=[
+        Extension(
+            name='%s.%s' % (__PACKAGE__, name),
+            sources=['%s/%s.pyx' % (__PACKAGE__, name)],
+            extra_compile_args=['-O3', '-funroll-loops', '-Wall'],
+        ) for name in ['fnv1a']
+    ],
     include_package_data=True,
     platforms='any',
     classifiers=(
@@ -23,8 +30,9 @@ setup(
         'Programming Language :: Python :: 2',
         'Topic :: System :: Monitoring',
     ),
+    setup_requires=['Cython'],
     install_requires=(
         'libmc',
     ),
-    test_suite='tests',
+    tests_require=['pytest'],
 )

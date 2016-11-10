@@ -1,0 +1,5 @@
+numpy
+libmc
+requests
+Cython
+pytest

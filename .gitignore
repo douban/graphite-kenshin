@@ -5,6 +5,7 @@ __pycache__/
 *~
 # C extensions
 *.so
+.eggs/
 
 # Distribution / packaging
 .Python
@@ -63,3 +64,6 @@ data/
 # ctags
 .tags_sorted_by_file
 .tags
+
+# cython generated c file
+/kenshin_api/*.c
