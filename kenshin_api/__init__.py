@@ -11,14 +11,14 @@ from os.path import (
 
 from graphite_api.node import LeafNode, BranchNode
 from graphite_api.intervals import Interval, IntervalSet
+
 import kenshin
+from kenshin_api.carbonlink import CarbonLinkPool
 
-KENSHINE_MC_KEY = 'kenshin:mckey:%s:%d:%d'
-EXPIRE_TIME = 20  # Memcached expire time: 20s
-LOCAL_MEMCACHE = ['localhost:11211']
 KENSHIN_EXT = '.hs'
-
-mc = libmc.Client(LOCAL_MEMCACHE)
+KENSHINE_MC_KEY = 'kenshin:mckey:%s:%d:%d'
+EXPIRE_TIME = None  # Memcached expire time
+mc = None
 
 
 # ========== utils =========
@@ -67,6 +67,11 @@ class KenshinFinder(object):
 
     def __init__(self, config):
         self.dirs = config['kenshin']['directories']
+        self.carbonlink = CarbonLinkPool(config['kenshin']['carbonlink_hosts'])
+
+        global EXPIRE_TIME, mc
+        EXPIRE_TIME = int(config['kenshin']['memcached']['expire_time'])
+        mc = libmc.Client(config['kenshin']['memcached']['hosts'])
 
     def find_nodes(self, query):
         clean_pattern = query.pattern.replace('\\', '')
@@ -83,7 +88,9 @@ class KenshinFinder(object):
 
                 elif isfile(abs_path):
                     if abs_path.endswith(KENSHIN_EXT):
-                        reader = KenshinReader(abs_path, metric_path)
+                        reader = KenshinReader(
+                            abs_path, metric_path, self.carbonlink
+                        )
                         yield LeafNode(metric_path, reader)
 
 

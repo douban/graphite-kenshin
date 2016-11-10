@@ -1,0 +1,18 @@
+search_index: <xxx>/index
+finders:
+  - kenshin_api.KenshinFinder
+kenshin:
+  directories:
+    - <xxx>/Kenshin/storage/link/0
+    - <xxx>/Kenshin/storage/link/1
+  carbonlink_hosts:
+    - 127.0.0.1:7002:0
+    - 127.0.0.1:7012:1
+  memcached:
+    expire_time: 20
+    hosts:
+      - 127.0.0.1:11211
+functions:
+  - graphite_api.functions.SeriesFunctions
+  - graphite_api.functions.PieFunctions
+  - kenshin_api.functions.SeriesFunctions
