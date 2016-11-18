@@ -3,8 +3,8 @@
 import time
 import socket
 import struct
-from fnv1a import get_int32_hash
 from six.moves import cPickle as pickle
+from fnv1a import get_int32_hash
 
 
 class Hash(object):
@@ -18,8 +18,13 @@ class Hash(object):
         self.size += 1
 
     def remove_node(self, node):
-        self.nodes.append(node)
-        self.size -= 1
+        try:
+            i = self.nodes.index(node)
+        except ValueError:
+            pass
+        else:
+            self.nodes.pop(i)
+            self.size -= 1
 
     def get_node(self, key):
         i = get_int32_hash(key) % self.size

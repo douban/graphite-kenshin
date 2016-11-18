@@ -1,5 +1,3 @@
-numpy
-libmc
-requests
-Cython
+-r pip-req.txt
 pytest
+mock

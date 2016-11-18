@@ -99,16 +99,24 @@ class KenshinFinder(object):
         underneath curr_dir match the corresponding pattern in patterns.
         """
         head, tail = patterns[0], patterns[1:]
-        has_wildcard = is_pattern
+        has_wildcard = is_pattern(head)
+        using_globstar = (head == '**')
 
         if has_wildcard:
             entries = os.listdir(curr_dir)
         else:
             entries = [head]
 
-        subdirs = [e for e in entries
-                   if isdir(join(curr_dir, e))]
-        matching_subdirs = match_entries(subdirs, head)
+        if using_globstar:
+            matching_subdirs = map(lambda x: x[0], os.walk(curr_dir))
+        else:
+            subdirs = [e for e in entries
+                    if isdir(join(curr_dir, e))]
+            matching_subdirs = match_entries(subdirs, head)
+
+        # For terminal globstar, add a pattern for all files in subdirs
+        if using_globstar and not tail:
+            tail = ['*']
 
         if tail:  # we've still got more directories to traverse
             for subdir in matching_subdirs:
