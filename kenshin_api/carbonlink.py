@@ -27,7 +27,7 @@ class Hash(object):
             self.size -= 1
 
     def get_node(self, key):
-        i = get_int32_hash(key) % self.size
+        i = get_int32_hash(str(key)) % self.size
         return self.nodes[i]
 
 
