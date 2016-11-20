@@ -90,7 +90,10 @@ class CarbonLinkPool(object):
         return results['value']
 
     def set_metadata(self, metric, key, value):
-        request = dict(type='set-metadata', metric=metric, key=key, value=value)
+        request = dict(type='set-metadata',
+                       metric=metric,
+                       key=key,
+                       value=value)
         results = self.send_request(request)
         return results
 

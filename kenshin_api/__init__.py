@@ -93,7 +93,6 @@ class KenshinFinder(object):
                         )
                         yield LeafNode(metric_path, reader)
 
-
     def _find_paths(self, curr_dir, patterns):
         """Recursively generates absolute paths whose components
         underneath curr_dir match the corresponding pattern in patterns.
@@ -111,7 +110,7 @@ class KenshinFinder(object):
             matching_subdirs = map(lambda x: x[0], os.walk(curr_dir))
         else:
             subdirs = [e for e in entries
-                    if isdir(join(curr_dir, e))]
+                       if isdir(join(curr_dir, e))]
             matching_subdirs = match_entries(subdirs, head)
 
         # For terminal globstar, add a pattern for all files in subdirs
@@ -156,7 +155,7 @@ class KenshinReader(object):
         metric = self.metric_path
         start_interval = start_time // EXPIRE_TIME
         end_interval = end_time // EXPIRE_TIME
-        key =  KENSHINE_MC_KEY % (metric, start_interval, end_interval)
+        key = KENSHINE_MC_KEY % (metric, start_interval, end_interval)
         data = mc.get(key)
         if not data:
             all_data = kenshin.fetch(self.fs_path, start_time, end_time)
