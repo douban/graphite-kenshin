@@ -1,7 +1,13 @@
 # coding: utf-8
+import sys
 from setuptools import setup, Extension, find_packages
 
 __PACKAGE__ = 'kenshin_api'
+
+needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+pytest_runner = ['pytest-runner'] if needs_pytest else []
+install_requires = ['libmc']
+tests_require = ['pytest', 'pytest-cov']
 
 setup(
     name=__PACKAGE__,
@@ -30,9 +36,8 @@ setup(
         'Programming Language :: Python :: 2',
         'Topic :: System :: Monitoring',
     ),
-    setup_requires=['Cython'],
-    install_requires=(
-        'libmc',
-    ),
-    tests_require=['pytest'],
+    setup_requires=['Cython'] + pytest_runner,
+    install_requires=install_requires,
+    tests_require=tests_require,
+    extras_require={'tests': tests_require}
 )
