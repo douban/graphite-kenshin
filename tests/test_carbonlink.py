@@ -3,7 +3,7 @@ import struct
 from mock import patch
 from six.moves import cPickle as pickle
 
-from kenshin_api.fnv1a import get_int32_hash
+from rurouni.fnv1a import get_int32_hash
 from kenshin_api.carbonlink import Hash, CarbonLinkPool
 
 

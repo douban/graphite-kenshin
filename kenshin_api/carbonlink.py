@@ -4,7 +4,7 @@ import time
 import socket
 import struct
 from six.moves import cPickle as pickle
-from kenshin_api.fnv1a import get_int32_hash
+from rurouni.fnv1a import get_int32_hash
 
 from structlog import get_logger
 logger = get_logger()
