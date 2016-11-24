@@ -4,7 +4,10 @@ import time
 import socket
 import struct
 from six.moves import cPickle as pickle
-from fnv1a import get_int32_hash
+from kenshin_api.fnv1a import get_int32_hash
+
+from structlog import get_logger
+logger = get_logger()
 
 
 class Hash(object):
@@ -102,8 +105,8 @@ class CarbonLinkPool(object):
         serialized_request = pickle.dumps(request, protocol=2)
         len_prefix = struct.pack('!L', len(serialized_request))
         request_packet = len_prefix + serialized_request
-        results = {}
-        results.setdefault('datapoints', [])
+        result = {}
+        result.setdefault('datapoints', [])
 
         host = self.select_host(metric)
         conn = self.get_connection(host)
@@ -112,10 +115,11 @@ class CarbonLinkPool(object):
             result = self.recv_response(conn)
         except Exception:
             self.last_failure[host] = time.time()
-            raise
+            logger.info('carbonlink exception', exe_info=True, host=str(host))
         else:
             self.connections[host].add(conn)
             if 'error' in result:
+                logger.error('carbonlink error', error=result['error'])
                 raise CarbonLinkRequestError(result['error'])
         return result
 
