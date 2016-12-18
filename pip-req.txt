@@ -1,0 +1,6 @@
+numpy
+libmc
+requests
+gunicorn
+graphite-api
+git+https://github.com/douban/Kenshin.git@master#egg=kenshin

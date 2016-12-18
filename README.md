@@ -59,3 +59,11 @@ Start graphite-api
     $ export GRAPHITE_API_CONFIG=<path/to/graphite-kenshin>/conf/graphite-api.yaml
     $ # update graphite-api.yaml
     $ gunicorn -w2 graphite_api.app:app -b 127.0.0.1:8888
+
+Contributors
+===================
+
+- [@zzl0](https://github.com/zzl0)
+- [@camper42](https://github.com/camper42)
+- [@windreamer](https://github.com/windreamer)
+
