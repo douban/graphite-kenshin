@@ -3,7 +3,6 @@ Graphite-Kenshin
 
 Graphite-Kenshin is a plugin for using graphtie-api with [Kenshin](https://github.com/douban/Kenshin) storage backend.
 
-
 Graphite Cluster
 ===================
 
@@ -18,10 +17,30 @@ Our graphite consists of three major components:
     - Kenshin, Time-series database library.
 - [carbon-c-realy](https://github.com/douban/carbon-c-relay.git), Enhanced C implementation of Carbon relay, aggregator and rewriter.
 
-<img src="/img/cluster.png" width="600"/>
+<img src="/img/cluster.png" width="800"/>
 
-Demo Cluster
+Install a demo cluster
 ===================
+
+Kenshin
+------------
+
+Refer [here](https://github.com/douban/Kenshin#quick-start) to install kenshin and start two `Rurouni-cache` instances.
+
+Graphite-Kenshin & Graphite-API
+------------------
+
+Install
+
+    $ git clone https://github.com/douban/graphite-kenshin.git
+    $ cd graphite-kenshin
+    $ GraphiteKenshinVenv=<venv_of_kenshin> make install
+
+Start Graphite-API
+
+    $ export GRAPHITE_API_CONFIG=<path/to/graphite-kenshin>/conf/graphite-api.yaml
+    $ # update graphite-api.yaml
+    $ gunicorn -w2 graphite_api.app:app -b 127.0.0.1:8888
 
 carbon-c-relay
 -----------------
@@ -38,27 +57,18 @@ Start carbon-c-realy:
     $ /path/to/relay -p 2001 -f ./conf/relay.conf -S 1 -H relay_0
 
 
-kenshin
-------------
+Send & Query metrics
+======================
 
-Refer [here](https://github.com/douban/Kenshin#quick-start) to create two `Rurouni-cache` instance.
+Send metrics to carbon-c-relay
 
-graphite-api
------------------
+    $ cd <directory_of_kenshin>
+    $ python examples/metric_stresser.py -a 127.0.0.1:2001 -f line -p 10 -m 100 -i 10
 
-Install
+Query metrics through Graphite-API
 
-    $ pip install graphite-api
-    $ pip install gunicorn
-    $ git clone https://github.com/douban/Kenshin.git
-    $ cd graphite-kenshin
-    $ python setup.py install
+    http://127.0.0.1:8888/render?target=metric_stresser.process_*.metric_id.0&width=1200&height=600&from=-10min
 
-Start graphite-api
-
-    $ export GRAPHITE_API_CONFIG=<path/to/graphite-kenshin>/conf/graphite-api.yaml
-    $ # update graphite-api.yaml
-    $ gunicorn -w2 graphite_api.app:app -b 127.0.0.1:8888
 
 Contributors
 ===================
