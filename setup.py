@@ -4,6 +4,9 @@ from setuptools import setup, find_packages
 
 __PACKAGE__ = 'kenshin_api'
 
+if sys.version_info < (2,7):
+    sys.exit('Sorry, Python < 2.7 is not supported')
+
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
 install_requires = ['libmc']
@@ -27,6 +30,7 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
         'Topic :: System :: Monitoring',
     ),
     setup_requires=pytest_runner,
