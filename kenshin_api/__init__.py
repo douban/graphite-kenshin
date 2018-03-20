@@ -69,13 +69,22 @@ def fs_to_metric(path):
 
 class KenshinFinder(object):
 
-    def __init__(self, config):
-        self.dirs = config['kenshin']['directories']
-        self.carbonlink = CarbonLinkPool(config['kenshin']['carbonlink_hosts'])
+    def __init__(self, config=None):
+        if config is not None:
+            self.dirs = config['kenshin']['directories']
+            self.carbonlink = CarbonLinkPool(config['kenshin']['carbonlink_hosts'])
 
-        global EXPIRE_TIME, mc
-        EXPIRE_TIME = int(config['kenshin']['memcached']['expire_time'])
-        mc = libmc.Client(config['kenshin']['memcached']['hosts'])
+            global EXPIRE_TIME, mc
+            EXPIRE_TIME = int(config['kenshin']['memcached']['expire_time'])
+            mc = libmc.Client(config['kenshin']['memcached']['hosts'])
+        else:
+            from django.conf import settings
+            self.dirs = getattr(settings, 'KENSHIN_DIRECTORIES')
+            self.carbonlink = CarbonLinkPool(getattr(settings, 'KENSHIN_CARBONLINK_HOSTS'))
+
+            global EXPIRE_TIME, mc
+            EXPIRE_TIME = int(getattr(settings, 'KENSHIN_MEMCACHED_EXPIRE_TIME'))
+            mc = libmc.Client(getattr(settings, 'KENSHIN_MEMCACHED_HOSTS'))
 
     def find_nodes(self, query):
         clean_pattern = query.pattern.replace('\\', '')
