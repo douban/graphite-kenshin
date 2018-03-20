@@ -9,8 +9,12 @@ from os.path import (
     join, isfile, isdir, dirname, basename
 )
 
-from graphite_api.node import LeafNode, BranchNode
-from graphite_api.intervals import Interval, IntervalSet
+try:
+    from graphite_api.node import LeafNode, BranchNode
+    from graphite_api.intervals import Interval, IntervalSet
+except ImportError:
+    from graphite.intervals import Interval, IntervalSet
+    from graphite.node import LeafNode, BranchNode
 
 import kenshin
 from kenshin_api.carbonlink import CarbonLinkPool
