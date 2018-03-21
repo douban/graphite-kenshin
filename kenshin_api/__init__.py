@@ -81,6 +81,7 @@ class KenshinFinder(object):
             from django.conf import settings
             self.dirs = getattr(settings, 'KENSHIN_DIRECTORIES')
             self.carbonlink = CarbonLinkPool(getattr(settings, 'KENSHIN_CARBONLINK_HOSTS'))
+            self.index_files = getattr(settings, 'KENSHIN_INDEX_FILES')
 
             global EXPIRE_TIME, mc
             EXPIRE_TIME = int(getattr(settings, 'KENSHIN_MEMCACHED_EXPIRE_TIME'))
@@ -145,6 +146,18 @@ class KenshinFinder(object):
 
             for _basename in matching_files + matching_subdirs:
                 yield join(curr_dir, _basename)
+
+    def get_index(self, requestContext):
+        matches = []
+
+        for filepath in self.index_files:
+            with open(filepath) as f:
+                for line in f:
+                    if line.endswith('\n'):
+                        metric = line.split(' ', 1)[0]
+                        matches.append(metric)
+        matches.sort()
+        return matches
 
 
 # ========== KenshinReader =========
