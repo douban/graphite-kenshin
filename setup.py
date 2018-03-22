@@ -9,7 +9,7 @@ if sys.version_info < (2,7):
 
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
-install_requires = ['libmc']
+install_requires = ['libmc', 'numpy', 'structlog']
 tests_require = ['pytest', 'pytest-cov']
 
 setup(
