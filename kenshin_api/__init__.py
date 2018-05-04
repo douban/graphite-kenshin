@@ -87,6 +87,10 @@ class KenshinFinder(object):
             EXPIRE_TIME = int(getattr(settings, 'KENSHIN_MEMCACHED_EXPIRE_TIME'))
             mc = libmc.Client(getattr(settings, 'KENSHIN_MEMCACHED_HOSTS'))
 
+    @classmethod
+    def factory(cls):
+        return [KenshinFinder()]
+
     def find_nodes(self, query):
         clean_pattern = query.pattern.replace('\\', '')
         pattern_parts = clean_pattern.split('.')
