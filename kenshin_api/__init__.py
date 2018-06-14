@@ -15,6 +15,16 @@ try:
 except ImportError:
     from graphite.intervals import Interval, IntervalSet
     from graphite.node import LeafNode, BranchNode
+try:
+    from graphite.readers import utils as readers_utils
+    BaseReader = readers_utils.BaseReader
+except ImportError:
+    BaseReader = object
+try:
+    from graphite.finders import utils as finders_utils
+    BaseFinder = finders_utils.BaseFinder
+except ImportError:
+    BaseFinder = object
 
 import kenshin
 from kenshin_api.carbonlink import CarbonLinkPool
@@ -67,7 +77,7 @@ def fs_to_metric(path):
 # ========== KenshinFinder =========
 
 
-class KenshinFinder(object):
+class KenshinFinder(BaseFinder):
 
     def __init__(self, config=None):
         if config is not None:
@@ -167,7 +177,7 @@ class KenshinFinder(object):
 # ========== KenshinReader =========
 
 
-class KenshinReader(object):
+class KenshinReader(BaseReader):
     __slots__ = ('fs_path', 'metric_path', 'carbonlink')
 
     def __init__(self, fs_path, metric_path, carbonlink=None):
